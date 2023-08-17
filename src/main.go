@@ -2,7 +2,7 @@ package main
 
 import(
 	"fmt"
-	"github.com/anirudh-devanand/PwdMngr/src/models"
+	"github.com/anirudh-devanand/Project-Go/src/models"
 )
 
 
