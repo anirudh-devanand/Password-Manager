@@ -1,7 +1,13 @@
 package models
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+	"log"
 
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+)
 
 // Entry represents a website-password entry
 type Entry struct {
@@ -11,75 +17,111 @@ type Entry struct {
 
 
 // EntryOps performs various operations on an Entry based on the given operation
-func (entry Entry) EntryOps(ops string, EntryDB map[string]string) {
-	switch ops {
+func (entry Entry) EntryOperations(operation string, entryDB *mongo.Collection) {
+	
+	switch operation {
 	case "CREATE":
-		create(entry,EntryDB)
+		create(entry, entryDB)
 	case "READ":
-		read(entry, EntryDB)
+		read(entry, entryDB)
 	case "UPDATE":
-		update(entry, EntryDB)
+		update(entry, entryDB)
 	case "DELETE":
-		del(entry.Website, EntryDB)
+		del(entry.Website, entryDB)
 	}
 }
 
 // create adds an entry to the map with the given website and password
-func create(entry Entry, EntryDB map[string]string) {
+func create(entry Entry, entryDB *mongo.Collection) {
 
-	// Check if website or password is empty
+	log.Println("Adding entry...")
 	if entry.Website == "" || entry.Password == "" {
 		fmt.Printf("ERROR: Enter valid credentials\n")
+		return
 	} else {
-		// Add the entry's website as the key and the password as the value
-		EntryDB[entry.Website] = entry.Password
+
+
+		newEntry := bson.M{entry.Website : entry.Password}
+		_, err := entryDB.InsertOne(context.TODO(), newEntry)
+
+		if err!=nil{
+			log.Fatal("Entry not added: ",err)
+
+			return
+		}
+
+		log.Println("Entry added")
 	}
 }
 
 // read retrieves and prints either the password or website depending on the entry
-func read(entry Entry, EntryDB map[string]string) {
-	val := ""
+func read(entry Entry, entryDB *mongo.Collection) {
 
-	// Determine whether to retrieve password or website based on the entry
+	log.Println("Lookup requested...")
+	var filter bson.M
+	var result Entry
+
 	if entry.Password == "" {
-		val = EntryDB[entry.Website]
-	} else {
-		for key,value := range EntryDB{
-			if value == entry.Password{
-				val = key
-				break
-			}
+
+		if entry.Website == "" { 
+			fmt.Printf("ERROR: Enter valid credentials\n")
+			return
 		}
+
+		filter = bson.M{entry.Website: bson.M{"$exists":true}}
+	} else {
+		filter = bson.M{"" : entry.Password}
 	}
 
-	// Print the retrieved value or an error message if not found
-	if val != "" {
-		fmt.Printf("%s",val)
-	} else {
-		fmt.Print("ERROR: Target not found\n")
+	err := entryDB.FindOne(context.TODO(), filter).Decode(&result)
+	if err != nil {
+		log.Fatal("Lookup failed: ",err)
+		return
 	}
+
+	log.Println("Lookup successful")
+	fmt.Printf("Found entry: %+v\n", result)
 }
 
 // update updates the password for a given website, and if the updated password is empty, calls del()
-func update(entry Entry, EntryDB map[string]string) {
-	pwd := entry.Password
-	web := entry.Website
+func update(entry Entry, entryDB *mongo.Collection) {
 
-	// Check if the website exists in the map
-	if EntryDB[web] != "" {
-		// If the password is empty, delete the entry for the given website
-		if pwd == "" {
-			del(web, EntryDB)
-		}
-		// Update the password for the given website
-		EntryDB[web] = pwd
-	} else {
+	log.Println("Updating entry...")
+
+	if entry.Website == ""{
 		fmt.Printf("ERROR: Enter valid credentials\n")
+		return
 	}
+
+	if entry.Password == "" {
+		del(entry.Website, entryDB)
+	}
+
+	filter := bson.M{entry.Website : bson.M{"$exists":true}}
+	update := bson.M{"$set": bson.M{entry.Website : entry.Password}}
+
+	_, err := entryDB.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		log.Fatal("Update unsuccessful: ",err)
+		return
+	}
+
+	log.Println("Update successful")
 }
 
 // del deletes an entry from the map for the given website
-func del(web string, EntryDB map[string]string) {
-	delete(EntryDB, web)
+func del(website string, entryDB *mongo.Collection) {
+
+	log.Println("Deleting entry...")
+
+	filter := bson.M{website : bson.M{"$exists":true}}
+
+	_, err := entryDB.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		log.Println("Deletion unsuccessful: ",err)
+		return
+	}
+
+	log.Println("Deletion successful")
 }
 
