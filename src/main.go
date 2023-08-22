@@ -21,7 +21,6 @@ func entryDB() (*mongo.Client){
 		log.Fatal(err)
 		return nil
 	}
-	defer client.Disconnect(context.Background()) // Close the connection when done
 
 	// Ping the MongoDB server to check if it's responsive
 	err = client.Ping(context.Background(), nil)
@@ -40,6 +39,8 @@ func entryDB() (*mongo.Client){
 func main(){
 
 	DBclient := entryDB();
+
+	defer DBclient.Disconnect(context.Background())
 
 	entryDB := DBclient.Database("PswdMngr").Collection("EntryDB")
 
@@ -63,7 +64,8 @@ func main(){
     			log.Fatal(err)
 			}
 
-			fmt.Println("Connection to MongoDB closed")
+			log.Println("Connection to MongoDB closed")
+			log.Println("Exiting program")
 			break;
 		}
 
