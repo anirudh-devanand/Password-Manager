@@ -1,52 +1,49 @@
 package models
 
 import (
-	"context"
-	"fmt"
 	"log"
+	"context"
+	"net/http"
+	"encoding/json"
+
+	"github.com/anirudh-devanand/PwdMngr-Go/src/initialize"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/gorilla/mux"
 )
 
-// Entry represents a website-password entry
+
 type Entry struct {
-	Website  string
-	Password string
+	Website  string `json:"Website"`
+	Password string `json:"Password"`
 }
 
-
-// EntryOps performs various operations on an Entry based on the given operation
-func (entry Entry) EntryOperations(operation string, entryDB *mongo.Collection) {
-	
-	switch operation {
-	case "CREATE":
-		create(entry, entryDB)
-	case "READ":
-		read(entry, entryDB)
-	case "UPDATE":
-		update(entry, entryDB)
-	case "DELETE":
-		del(entry.Website, entryDB)
-	}
-}
 
 // create adds an entry to the map with the given website and password
-func create(entry Entry, entryDB *mongo.Collection) {
+func Create(w http.ResponseWriter, r *http.Request) {
+
+	var entry Entry
+
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+        http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		log.Println("Failed to parse POST request body")
+        return
+    }
+
+	entryDB := initialize.GetDB()
 
 	log.Println("Adding entry...")
+
 	if entry.Website == "" || entry.Password == "" {
-		fmt.Printf("ERROR: Enter valid credentials\n")
+		http.Error(w,"Invalid credentials entered", http.StatusBadRequest)
+		log.Println("Invalid credentials entered")
 		return
 	} else {
-
-
-		newEntry := bson.M{entry.Website : entry.Password}
-		_, err := entryDB.InsertOne(context.TODO(), newEntry)
-
+		_, err := entryDB.InsertOne(context.TODO(), bson.M{"Website":entry.Website, "Password": entry.Password})
 		if err!=nil{
+			http.Error(w,"Error adding entry to database", http.StatusInternalServerError)
 			log.Fatal("Entry not added: ",err)
-
 			return
 		}
 
@@ -54,74 +51,115 @@ func create(entry Entry, entryDB *mongo.Collection) {
 	}
 }
 
+
 // read retrieves and prints either the password or website depending on the entry
-func read(entry Entry, entryDB *mongo.Collection) {
+func Read(w http.ResponseWriter, r *http.Request) {
+
+	HTTPparameters := mux.Vars(r)
+
+	var entry Entry
+	entry.Website = HTTPparameters["website"]
+
+	entryDB := initialize.GetDB()
 
 	log.Println("Lookup requested...")
+
 	var filter bson.M
 	var result Entry
 
-	if entry.Password == "" {
-
-		if entry.Website == "" { 
-			fmt.Printf("ERROR: Enter valid credentials\n")
+	if entry.Website == "" { 
+			http.Error(w,"Invalid credentials entered", http.StatusBadRequest)
+			log.Println("Invalid credentials entered")
 			return
 		}
 
-		filter = bson.M{entry.Website: bson.M{"$exists":true}}
-	} else {
-		filter = bson.M{"" : entry.Password}
-	}
+	filter = bson.M{"Website" : entry.Website}
 
 	err := entryDB.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
+		http.Error(w,"Error searching for entry in database", http.StatusInternalServerError)
 		log.Fatal("Lookup failed: ",err)
 		return
 	}
 
 	log.Println("Lookup successful")
-	fmt.Printf("Found entry: %+v\n", result)
+
+	jsonResponse, err := json.Marshal(result)
+	if err != nil {
+		http.Error(w, "Error creating JSON response", http.StatusInternalServerError)
+		log.Println("Error creating JSON response: ", err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	_, err = w.Write(jsonResponse)
+	if err != nil {
+		http.Error(w, "Error writing JSON response", http.StatusInternalServerError)
+		log.Println("Error creating JSON response: ",err)
+		return
+	}
+
 }
 
-// update updates the password for a given website, and if the updated password is empty, calls del()
-func update(entry Entry, entryDB *mongo.Collection) {
 
+// update updates the password for a given website, and if the updated password is empty, calls del()
+func Update(w http.ResponseWriter, r *http.Request) {
+
+	var entry Entry
+
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+        http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		log.Println("Failed to parse POST request body")
+        return
+    }
+
+	entryDB := initialize.GetDB()
+	
 	log.Println("Updating entry...")
 
 	if entry.Website == ""{
-		fmt.Printf("ERROR: Enter valid credentials\n")
+		http.Error(w,"Invalid credentials entered", http.StatusBadRequest)
+		log.Println("Invalid credentials entered")
 		return
 	}
 
 	if entry.Password == "" {
-		del(entry.Website, entryDB)
+		Delete(w, r)
 	}
 
-	filter := bson.M{entry.Website : bson.M{"$exists":true}}
-	update := bson.M{"$set": bson.M{entry.Website : entry.Password}}
+	filter := bson.M{"Website" : entry.Website}
+	update := bson.M{"$set": bson.M{"Password" : entry.Password}}
 
-	_, err := entryDB.UpdateOne(context.TODO(), filter, update)
+	_, err = entryDB.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		log.Fatal("Update unsuccessful: ",err)
+		http.Error(w,"Error updating entry in database", http.StatusInternalServerError)
+		log.Fatal("Update failed: ",err)
 		return
 	}
 
 	log.Println("Update successful")
 }
 
-// del deletes an entry from the map for the given website
-func del(website string, entryDB *mongo.Collection) {
+
+// delete deletes an entry from the map for the given website
+func Delete(w http.ResponseWriter, r *http.Request) {
+	HTTPparameters := mux.Vars(r)
+	website := HTTPparameters["website"]
+
+	entryDB := initialize.GetDB()
 
 	log.Println("Deleting entry...")
 
-	filter := bson.M{website : bson.M{"$exists":true}}
+	filter := bson.M{"Website": website}
 
 	_, err := entryDB.DeleteOne(context.TODO(), filter)
 	if err != nil {
+		http.Error(w,"Error deleting entry in database", http.StatusInternalServerError)
 		log.Println("Deletion unsuccessful: ",err)
 		return
 	}
 
 	log.Println("Deletion successful")
 }
-
