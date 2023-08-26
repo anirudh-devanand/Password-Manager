@@ -53,7 +53,6 @@ func InitDB() {
 }
 
 func GetDB() (*mongo.Collection){
-	InitDB()
 	return mongoDB
 }
 

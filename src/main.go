@@ -1,10 +1,11 @@
 package main
 
 import(
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/anirudh-devanand/PwdMngr-Go/src/models"
+	"github.com/anirudh-devanand/PwdMngr-Go/src/initialize"
 
 	"github.com/gorilla/mux"
 )
@@ -24,7 +25,9 @@ func main(){
 	router.HandleFunc("/entry/{website}", models.Update).Methods("PUT")
 	router.HandleFunc("/entry/{website}", models.Delete).Methods("DELETE")
 
+	initialize.InitDB()
+
     http.Handle("/", router)
-    fmt.Println("Server is running on :8080")
+    log.Println("Server is running on :8080")
     http.ListenAndServe(":8080", nil)
 }
