@@ -8,6 +8,7 @@ import (
 	"github.com/anirudh-devanand/PwdMngr-Go/src/models"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -21,7 +22,22 @@ func main() {
 
 	initialize.InitDB()
 
+	c := cors.New(cors.Options{
+        AllowedOrigins: []string{"*"},
+        AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+        AllowedHeaders: []string{"*"},
+        AllowCredentials: true,
+    })
+
+
+    handler := c.Handler(router)
+
+	
+	log.Println("Server is running on :8081")
+
 	http.Handle("/", router)
-	log.Println("Server is running on :8080")
-	http.ListenAndServe(":8080", nil)
+    http.ListenAndServe(":8081", handler)
+
+
+
 }
