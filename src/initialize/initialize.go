@@ -3,7 +3,8 @@ package initialize
 import (
 	"context"
 	"log"
-
+	"os"
+	
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -14,8 +15,19 @@ var (
 )
 
 func initClient() {
-	// Set client options to specify the MongoDB connection URI
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+
+	host := os.Getenv("LOCALHOST")
+
+    // Check if the environment variable is set
+    if host == "" {
+        log.Fatal("HOST is not set")
+    } else {
+        log.Printf("HOST is set to %s\n", host)
+    }
+
+	uri := "mongodb://" + host + ":27017"
+
+	clientOptions := options.Client().ApplyURI(uri)
 	var err error
 
 	// Connect to MongoDB
