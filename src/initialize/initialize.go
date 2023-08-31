@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
-	
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -16,7 +16,7 @@ var (
 
 func initClient() {
 
-	host := os.Getenv("LOCALHOST")
+	host := os.Getenv("HOST")
 
     // Check if the environment variable is set
     if host == "" {
