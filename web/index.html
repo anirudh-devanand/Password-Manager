@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PwdMngr</title>
+</head>
+<body>
+<div id="root">
+    <div id="get">
+        <input id="getweb" type="text" placeholder="Enter Website">
+        <button id="getbtn" onclick="GET()">
+            Get Entry
+        </button>
+    </div>
+
+    <div id="post">
+        <input id="postweb" type="text" placeholder="Enter Website">
+        <input id="postpass" type="text" placeholder="Enter Password">
+        <button id="postbtn" onclick="POST()">
+            Create Entry
+        </button>
+    </div>
+
+    <div id="put">
+        <input id="putweb" type="text" placeholder="Enter Website">
+        <input id="putpass" type="text" placeholder="Enter Password">
+        <button id="putbtn" onclick="PUT()">
+            Update Entry
+        </button>
+    </div>
+
+    <div id="delete">
+        <input id="delweb" type="text" placeholder="Enter Website">
+        <button id="delbtn" onclick="DEL()">
+            Delete Entry
+        </button>
+    </div>
+
+    <div id="text">
+    </div>
+</div>
+
+<script>
+function GET(){
+    var web = document.getElementById("getweb").value;
+
+    let r = new XMLHttpRequest();
+    let url = 'http://localhost:8081/entry/' + encodeURIComponent(web);
+
+    r.open("GET", url, true);
+ 
+    r.onreadystatechange = function () {
+        var text = document.getElementById("text");
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                text.innerHTML = this.responseText;
+            } else {
+                text.innerHTML = "Lookup failed";
+            }
+        }
+    };
+
+    r.send();
+}
+
+function POST(){
+    var web = document.getElementById("postweb").value;
+    var pass = document.getElementById("postpass").value;
+
+    var json = {
+        Website: web,
+        Password: pass
+    };
+
+    let r = new XMLHttpRequest();
+    let url = 'http://localhost:8081/entry';
+
+    r.open("POST", url, true);
+    r.setRequestHeader("Content-Type", "application/json");
+ 
+    r.onreadystatechange = function () {
+        var text = document.getElementById("text");
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                text.innerHTML = "Creation successful";
+            } else {
+                text.innerHTML = "Creation failed";
+            }
+        }
+    };
+
+    r.send(JSON.stringify(json));
+}
+
+function PUT(){
+    var web = document.getElementById("putweb").value;
+    var pass = document.getElementById("putpass").value;
+
+    var json = {
+        Website: web,
+        Password: pass
+    };
+
+    let r = new XMLHttpRequest();
+    let url = 'http://localhost:8081/entry/' + encodeURIComponent(web);
+
+    r.open("PUT", url, true);
+    r.setRequestHeader("Content-Type", "application/json");
+ 
+    r.onreadystatechange = function () {
+        var text = document.getElementById("text");
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                text.innerHTML = "Update successful";
+            } else {
+                text.innerHTML = "Update failed";
+            }
+        }
+    };
+
+    r.send(JSON.stringify(json));
+}
+
+function DEL(){
+    var web = document.getElementById("delweb").value; 
+
+    let r = new XMLHttpRequest();
+    let url = 'http://localhost:8081/entry/' + encodeURIComponent(web);
+
+    r.open("DELETE", url, true);
+ 
+    r.onreadystatechange = function () {
+        var text = document.getElementById("text");
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                text.innerHTML = "Deletion successful";
+            } else {
+                text.innerHTML = "Deletion failed";
+            }
+        }
+    };
+
+    r.send();
+}
+</script>
+</body>
+</html>
