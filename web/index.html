@@ -7,34 +7,34 @@
 <div id="root">
     <!-- Get Entry Section -->
     <div id="get">
-        <input id="getweb" type="text" placeholder="Enter Website">
-        <button id="getbtn" data-clear-target="getweb" onclick="GET()">
+        <input id="getweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'getweb')">
+        <button id="getbtn" onclick="GET()">
             Get Entry
         </button>
     </div>
 
     <!-- Create Entry Section -->
     <div id="post">
-        <input id="postweb" type="text" placeholder="Enter Website">
-        <input id="postpass" type="text" placeholder="Enter Password">
-        <button id="postbtn" data-clear-target="postweb postpass" onclick="POST()">
+        <input id="postweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'postweb')">
+        <input id="postpass" type="text" placeholder="Enter Password"  onkeypress="clearOnEnter(event, 'postpass')">
+        <button id="postbtn" onclick="POST()">
             Create Entry
         </button>
     </div>
 
     <!-- Update Entry Section -->
     <div id="put">
-        <input id="putweb" type="text" placeholder="Enter Website">
-        <input id="putpass" type="text" placeholder="Enter Password">
-        <button id="putbtn" data-clear-target="putweb putpass" onclick="PUT()">
+        <input id="putweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'putweb')">
+        <input id="putpass" type="text" placeholder="Enter Password"  onkeypress="clearOnEnter(event, 'putpass')">
+        <button id="putbtn" onclick="PUT()">
             Update Entry
         </button>
     </div>
 
     <!-- Delete Entry Section -->
     <div id="delete">
-        <input id="delweb" type="text" placeholder="Enter Website">
-        <button id="delbtn" data-clear-target="delweb" onclick="DEL()">
+        <input id="delweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'delweb')">
+        <button id="delbtn" onclick="DEL()">
             Delete Entry
         </button>
     </div>

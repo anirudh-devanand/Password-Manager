@@ -8,7 +8,7 @@
     <!-- Get Entry Section -->
     <div id="get">
         <input id="getweb" type="text" placeholder="Enter Website">
-        <button id="getbtn" data-clear-target="getweb" onclick="GET()">
+        <button id="getbtn" onclick="GET()">
             Get Entry
         </button>
     </div>
@@ -17,7 +17,7 @@
     <div id="post">
         <input id="postweb" type="text" placeholder="Enter Website">
         <input id="postpass" type="text" placeholder="Enter Password">
-        <button id="postbtn" data-clear-target="postweb postpass" onclick="POST()">
+        <button id="postbtn" onclick="POST()">
             Create Entry
         </button>
     </div>
@@ -26,7 +26,7 @@
     <div id="put">
         <input id="putweb" type="text" placeholder="Enter Website">
         <input id="putpass" type="text" placeholder="Enter Password">
-        <button id="putbtn" data-clear-target="putweb putpass" onclick="PUT()">
+        <button id="putbtn" onclick="PUT()">
             Update Entry
         </button>
     </div>
@@ -34,7 +34,7 @@
     <!-- Delete Entry Section -->
     <div id="delete">
         <input id="delweb" type="text" placeholder="Enter Website">
-        <button id="delbtn" data-clear-target="delweb" onclick="DEL()">
+        <button id="delbtn" onclick="DEL()">
             Delete Entry
         </button>
     </div>
@@ -45,13 +45,6 @@
 </div>
 
 <script>
-
-//clearOnEnter clears texts boxes after each use 
-function clearOnEnter(event, inputId) {
-    if (event.keyCode === 13) { // Check if the Enter key is pressed (key code 13)
-        document.getElementById(inputId).value = ''; // Clear the input field
-    }
-}
 
 //GET sends a GET call to REST API client   
 function GET(){
