@@ -47,7 +47,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		_, err := entryDB.InsertOne(context.TODO(), bson.M{"Website":entry.Website, "Password": entry.Password})
 		if err!=nil{
 			http.Error(w,"Error adding entry to database", http.StatusInternalServerError)
-			log.Fatal("Entry not added: ",err)
+			log.Println("Entry not added: ",err)
 			return
 		}
 
@@ -87,7 +87,7 @@ func Read(w http.ResponseWriter, r *http.Request) {
 	err := entryDB.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		http.Error(w,"Error searching for entry in database", http.StatusInternalServerError)
-		log.Fatal("Lookup failed: ",err)
+		log.Println("Lookup failed: ",err)
 		return
 	}
 
@@ -153,7 +153,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	_, err = entryDB.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		http.Error(w,"Error updating entry in database", http.StatusInternalServerError)
-		log.Fatal("Update failed: ",err)
+		log.Println("Update failed: ",err)
 		return
 	}
 
