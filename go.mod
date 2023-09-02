@@ -1,4 +1,4 @@
-module github.com/anirudh-devanand/PwdMngr-Go
+module github.com/anirudh-devanand/Password-Manager
 
 go 1.21.0
 

@@ -7,7 +7,7 @@
 <div id="root">
     <!-- Get Entry Section -->
     <div id="get">
-        <input id="getweb" type="text" placeholder="Enter Website">
+        <input id="getweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'getweb')">
         <button id="getbtn" onclick="GET()">
             Get Entry
         </button>
@@ -15,8 +15,8 @@
 
     <!-- Create Entry Section -->
     <div id="post">
-        <input id="postweb" type="text" placeholder="Enter Website">
-        <input id="postpass" type="text" placeholder="Enter Password">
+        <input id="postweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'postweb')">
+        <input id="postpass" type="text" placeholder="Enter Password"  onkeypress="clearOnEnter(event, 'postpass')">
         <button id="postbtn" onclick="POST()">
             Create Entry
         </button>
@@ -24,8 +24,8 @@
 
     <!-- Update Entry Section -->
     <div id="put">
-        <input id="putweb" type="text" placeholder="Enter Website">
-        <input id="putpass" type="text" placeholder="Enter Password">
+        <input id="putweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'putweb')">
+        <input id="putpass" type="text" placeholder="Enter Password"  onkeypress="clearOnEnter(event, 'putpass')">
         <button id="putbtn" onclick="PUT()">
             Update Entry
         </button>
@@ -33,7 +33,7 @@
 
     <!-- Delete Entry Section -->
     <div id="delete">
-        <input id="delweb" type="text" placeholder="Enter Website">
+        <input id="delweb" type="text" placeholder="Enter Website"  onkeypress="clearOnEnter(event, 'delweb')">
         <button id="delbtn" onclick="DEL()">
             Delete Entry
         </button>
@@ -45,6 +45,13 @@
 </div>
 
 <script>
+
+//clearOnEnter clears texts boxes after each use 
+function clearOnEnter(event, inputId) {
+    if (event.keyCode === 13) { // Check if the Enter key is pressed (key code 13)
+        document.getElementById(inputId).value = ''; // Clear the input field
+    }
+}
 
 //GET sends a GET call to REST API client   
 function GET(){

@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/anirudh-devanand/PwdMngr-Go/src/initialize"
-	"github.com/anirudh-devanand/PwdMngr-Go/src/models"
+	"github.com/anirudh-devanand/Password-Manager/src/initialize"
+	"github.com/anirudh-devanand/Password-Manager/src/models"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"

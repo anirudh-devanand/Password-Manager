@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"encoding/json"
 
-	"github.com/anirudh-devanand/PwdMngr-Go/src/initialize"
+	"github.com/anirudh-devanand/Password-Manager/src/initialize"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"github.com/gorilla/mux"
