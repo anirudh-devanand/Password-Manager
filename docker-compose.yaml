@@ -5,7 +5,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      HOST: 192.168.2.141
+    #HOST env is set to point to the 'mongodb' service defined below (Docker's DNS resolves this internally during runtime)
+      HOST: mongodb
     depends_on:
       - mongodb
 
