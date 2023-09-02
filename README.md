@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-This project is the beginning of my experience with **DevOps** workflows. The project consists of a three-tier **cloud-native** architecture with my **Gloang RESTful API**, a **Mongo** database, and a website hosted on **Apache** at the cores. These three components runs as **Docker** containers orchestrated by **Docker-Compose**. 
+This project is the beginning of my experience with **DevOps** workflows. The project consists of a three-tier **cloud-native** architecture with my **Gloang RESTful API**, a **Mongo** database, and a website hosted on **Apache**. These three components run as **Docker** containers orchestrated by **Docker-Compose**. 
 
 ## Technology
 
 This uses a number of open-source projects and technologies to work properly:
 
-- [Gorrlia Mux] - HTTP Router to handle API calls
+- [Gorilla Mux] - HTTP Router to handle API calls
 - [RS CORS] - Middleware to enable Cross_origin Resource Sharing (CORS)
 - [XMLHttpRequest] - Web API that makes HTTP and XML calls
 
