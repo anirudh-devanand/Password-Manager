@@ -1,11 +1,11 @@
 # Password Manager
----
+
 ## Project Overview
----
+
 This project is the beginning of my experience with **DevOps** workflows. The project consists of a three-tier **cloud-native** architecture with my **Gloang RESTful API**, a **Mongo** database, and a website hosted on **Apache** at the cores. These three components runs as **Docker** containers orchestrated by **Docker-Compose**. 
 
 ## Technology
----
+
 This uses a number of open-source projects and technologies to work properly:
 
 - [Gorrlia Mux] - HTTP Router to handle API calls
@@ -17,7 +17,7 @@ This uses a number of open-source projects and technologies to work properly:
 - [MongoDB] - Non-Relational key-value store  
    
 ## Installation
----
+
 **Password Manager** was built with [Docker](https://www.docker.com/) v24.0.2+ and needs the same to run smoothly so please ensure that you have done this as you follow along.
 
 Verify the `Docker` installation with  with:
@@ -56,7 +56,7 @@ http://localhost:8082
 ```
 
 ## Finals Thoughts
----
+
 This is still a work in process and as I learn and evolve so will this project.
 In the meantime, I hope y'all like what I have done here.
 
