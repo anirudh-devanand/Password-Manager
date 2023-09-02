@@ -15,7 +15,8 @@ This uses a number of open-source projects and technologies to work properly:
 - [Docker] - Containerization and orchestration platform
 - [Apache] - HTTP Webserver for hosting websites
 - [MongoDB] - Non-Relational key-value store  
-   
+
+
 ## Installation
 
 **Password Manager** was built with [Docker](https://www.docker.com/) v24.0.2+ and needs the same to run smoothly so please ensure that you have done this as you follow along.
@@ -28,25 +29,10 @@ docker version
 
 Download the `Password-Manager` `docker-compose.yaml` file from [here](https://github.com/anirudh-devanand/Password-Manager/blob/main/docker-compose.yaml) by pressing `Ctrl + Shift + S`.
 
-Open the `docker-compose.yaml`  file with a text editor of your choice and change the following line:
-```sh
-HOST: 192.168.2.141 #Replace '192.168.2.141' IP with your Private IPv4 Address
-```
-You can find your Private IPv4 on **Windows** either [manually](https://support.microsoft.com/en-us/windows/find-your-ip-address-in-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9) or by running the command:
-```sh
-ipconfig
-```
-In the output, under `Wireless LAN Adapter`, and under the `IPv4 Address` section find a number that looks like **192.168.x.x** or **10.x.x.x**. 
+Open the `terminal` application on your system and navigate to the folder that containes the downloaded `docker-compose.yaml` file.
 
-On **Unix-like** systems run the command:    
- ```sh
-$ ifconfig
- ```
- In the output, under `wlan0`, and next to the `inet` section, find a number that looks like **192.168.x.x** or **10.x.x.x**. 
  
- Once you have your `Private IPv4`, replace the aforementioned line and save the `docker-compose.yaml` file.
- 
- Run the following command in the folder that contains `docker-compose.yaml`:
+ Run the following command in the said folder:
   ```sh
   docker-compose up
   ```
@@ -66,7 +52,7 @@ In the meantime, I hope y'all like what I have done here.
 
 
 
-[Gorrlia Mux]:https://github.com/gorilla/mux
+[Gorilla Mux]:https://github.com/gorilla/mux
 [RS CORS]:https://github.com/rs/cors
 [XMLHttpRequest]: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 [Docker]: https://www.docker.com/
