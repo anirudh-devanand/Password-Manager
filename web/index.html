@@ -5,6 +5,7 @@
 </head>
 <body>
 <div id="root">
+    <!-- Get Entry Section -->
     <div id="get">
         <input id="getweb" type="text" placeholder="Enter Website">
         <button id="getbtn" onclick="GET()">
@@ -12,6 +13,7 @@
         </button>
     </div>
 
+    <!-- Create Entry Section -->
     <div id="post">
         <input id="postweb" type="text" placeholder="Enter Website">
         <input id="postpass" type="text" placeholder="Enter Password">
@@ -20,6 +22,7 @@
         </button>
     </div>
 
+    <!-- Update Entry Section -->
     <div id="put">
         <input id="putweb" type="text" placeholder="Enter Website">
         <input id="putpass" type="text" placeholder="Enter Password">
@@ -28,6 +31,7 @@
         </button>
     </div>
 
+    <!-- Delete Entry Section -->
     <div id="delete">
         <input id="delweb" type="text" placeholder="Enter Website">
         <button id="delbtn" onclick="DEL()">
@@ -35,19 +39,26 @@
         </button>
     </div>
 
+    
     <div id="text">
     </div>
 </div>
 
 <script>
+
+//GET sends a GET call to REST API client   
 function GET(){
+    // Get the website value from the input field
     var web = document.getElementById("getweb").value;
 
+    // Create a new XMLHttpRequest
     let r = new XMLHttpRequest();
     let url = 'http://localhost:8081/entry/' + encodeURIComponent(web);
 
+    // Set up a GET request
     r.open("GET", url, true);
- 
+
+    // Define a callback function for handling the response
     r.onreadystatechange = function () {
         var text = document.getElementById("text");
         if (this.readyState == 4) {
@@ -59,24 +70,31 @@ function GET(){
         }
     };
 
+    // Send the GET request
     r.send();
 }
 
+//POST sends a POST call to REST API client
 function POST(){
+    // Get the website and password values from the input fields
     var web = document.getElementById("postweb").value;
     var pass = document.getElementById("postpass").value;
 
+    // Create a JSON object to send as the request payload
     var json = {
         Website: web,
         Password: pass
     };
 
+    // Create a new XMLHttpRequest
     let r = new XMLHttpRequest();
     let url = 'http://localhost:8081/entry';
 
+    // Set up a POST request with JSON payload
     r.open("POST", url, true);
     r.setRequestHeader("Content-Type", "application/json");
- 
+
+    // Define a callback function for handling the response
     r.onreadystatechange = function () {
         var text = document.getElementById("text");
         if (this.readyState == 4) {
@@ -88,24 +106,31 @@ function POST(){
         }
     };
 
+    // Send the POST request with a stringified JSON payload
     r.send(JSON.stringify(json));
 }
 
+//PUT sends a PUT call to REST API client
 function PUT(){
+    // Get the website and password values from the input fields
     var web = document.getElementById("putweb").value;
     var pass = document.getElementById("putpass").value;
 
+    // Create a JSON object to send as the request payload
     var json = {
         Website: web,
         Password: pass
     };
 
+    // Create a new XMLHttpRequest
     let r = new XMLHttpRequest();
     let url = 'http://localhost:8081/entry/' + encodeURIComponent(web);
 
+    // Set up a PUT request with JSON payload
     r.open("PUT", url, true);
     r.setRequestHeader("Content-Type", "application/json");
- 
+
+    // Define a callback function for handling the response
     r.onreadystatechange = function () {
         var text = document.getElementById("text");
         if (this.readyState == 4) {
@@ -117,17 +142,23 @@ function PUT(){
         }
     };
 
+    // Send the PUT request with a stringified JSON payload
     r.send(JSON.stringify(json));
 }
 
+//DEL sends a DELETE call to REST API client
 function DEL(){
+    // Get the website value from the input field
     var web = document.getElementById("delweb").value; 
 
+    // Create a new XMLHttpRequest
     let r = new XMLHttpRequest();
     let url = 'http://localhost:8081/entry/' + encodeURIComponent(web);
 
+    // Set up a DELETE request
     r.open("DELETE", url, true);
- 
+
+    // Define a callback function for handling the response
     r.onreadystatechange = function () {
         var text = document.getElementById("text");
         if (this.readyState == 4) {
@@ -139,6 +170,7 @@ function DEL(){
         }
     };
 
+    // Send the DELETE request
     r.send();
 }
 </script>
