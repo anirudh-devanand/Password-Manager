@@ -9,7 +9,7 @@ This project is the beginning of my experience with **DevOps** workflows. The pr
 This uses a number of open-source projects and technologies to work properly:
 
 - [Gorilla Mux] - HTTP Router to handle API calls
-- [RS CORS] - Middleware to enable Cross_origin Resource Sharing (CORS)
+- [RS CORS] - Middleware to enable Cross Origin Resource Sharing (CORS)
 - [XMLHttpRequest] - Web API that makes HTTP and XML calls
 
 - [Docker] - Containerization and orchestration platform
